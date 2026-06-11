@@ -16,7 +16,6 @@ staticfiles/
 # TensorFlow/Keras
 .keras/
 .keras_cache/
-models/*.h5
 
 # IDE
 .vscode/
@@ -36,9 +35,3 @@ Thumbs.db
 # 忽略模型文件
 models/*.h5
 models/*.hdf5
-
-# 忽略 Python 编译文件（你提交里的 .pyc 文件也可以一起忽略）
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
