@@ -1,0 +1,159 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>五谷识别系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            text-align: center;
+            background: url('{% static "recognition/1.png" %}') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            margin: 50px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .logo {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 26px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .file-upload-area {
+            border: 2px dashed #a5d6a7;
+            border-radius: 12px;
+            padding: 30px 20px;
+            margin: 20px 0;
+            background: #f9fdf9;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        .file-upload-area:hover {
+            border-color: #4CAF50;
+            background: #f1f8e9;
+        }
+        .file-upload-area input[type=file] {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            color: #555;
+        }
+        .file-upload-area .hint {
+            color: #999;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        .btn-submit {
+            background: #4CAF50;
+            color: white;
+            padding: 14px 40px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+            margin-top: 10px;
+            width: 100%;
+        }
+        .btn-submit:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+        }
+        .error {
+            color: #f44336;
+            background: #ffebee;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            border-left: 4px solid #f44336;
+        }
+        .categories {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .categories span {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .footer-links {
+            margin-top: 25px;
+        }
+        .footer-links a {
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 14px;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: background 0.3s;
+        }
+        .footer-links a:hover {
+            background: #e8f5e9;
+        }
+        .note {
+            color: #ff9800;
+            font-size: 13px;
+            margin-top: 20px;
+            background: #fff3e0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo"></div>
+        <h2>五谷识别系统</h2>
+        <p class="subtitle">上传图片，模型自动识别五谷类型</p>
+
+        <div class="categories">
+            <span>黄豆</span><span>玉米</span><span>小麦</span><span>小米</span><span>稻谷</span>
+        </div>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="/predict/" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="file-upload-area">
+                <input type="file" name="image" accept="image/*" required>
+                <p class="hint">点击上方选择图片文件</p>
+            </div>
+            <button class="btn-submit" type="submit">开始识别</button>
+        </form>
+        <p class="note">支持 JPG、JPEG、PNG、BMP、GIF 格式的图片</p>
+    </div>
+</body>
+</html>

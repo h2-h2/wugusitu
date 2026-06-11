@@ -1,0 +1,173 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>识别结果 - 五谷识别系统</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', Arial, sans-serif;
+            text-align: center;
+            background: url('{% static "recognition/2.png" %}') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            margin: 30px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 650px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 25px;
+            font-size: 28px;
+        }
+        .uploaded-img {
+            width: 280px;
+            border-radius: 15px;
+            margin: 20px 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 3px solid #e8f5e9;
+        }
+        table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 16px;
+        }
+        th {
+            background: #4CAF50;
+            color: white;
+            padding: 14px;
+            font-weight: 500;
+        }
+        th:first-child { border-radius: 10px 0 0 0; }
+        th:last-child { border-radius: 0 10px 0 0; }
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e8f5e9;
+            color: #333;
+        }
+        tr:hover td { background: #f1f8e9; }
+        .result-yes {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 5px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .result-no {
+            display: inline-block;
+            background: #f44336;
+            color: white;
+            padding: 5px 18px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .conf-high { color: #2e7d32; font-weight: bold; }
+        .conf-low { color: #f44336; font-weight: bold; }
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 14px 35px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 16px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76,175,80,0.3);
+        }
+        .btn-back:hover {
+            background: #388E3C;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+        }
+        
+        .summary-box {
+            background: #f1f8e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-left: 4px solid #4CAF50;
+        }
+        .summary-box p { font-size: 16px; color: #333; line-height: 1.8; }
+        .highlight { color: #2e7d32; font-weight: bold; font-size: 18px; }
+        .note {
+            margin-top: 15px;
+            color: #999;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>识别结果</h2>
+
+        <img class="uploaded-img" src="{{ img_url }}" alt="上传的图片">
+
+        <table>
+            <tr>
+                <th>模型</th>
+                <th>预测结果</th>
+                <th>置信度</th>
+                <th>判定 (>60%)</th>
+            </tr>
+            <tr>
+                <td><strong>MobileNetV2</strong></td>
+                <td>{{ label1 }}</td>
+                <td><span class="{% if conf1_num|floatformat:1 > '60' %}conf-high{% else %}conf-low{% endif %}">{{ conf1 }}</span></td>
+                <td>
+                    {% if result1 == '是' %}
+                        <span class="result-yes">是</span>
+                    {% else %}
+                        <span class="result-no">不是</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td><strong>ResNet50</strong></td>
+                <td>{{ label2 }}</td>
+                <td><span class="{% if conf2_num|floatformat:1 > '60' %}conf-high{% else %}conf-low{% endif %}">{{ conf2 }}</span></td>
+                <td>
+                    {% if result2 == '是' %}
+                        <span class="result-yes">是</span>
+                    {% else %}
+                        <span class="result-no">不是</span>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <div class="summary-box">
+            <p>
+                MobileNetV2 预测：<span class="highlight">{{ label1 }}</span>，
+                置信度 <span class="highlight">{{ conf1 }}</span>，
+                判定：<span class="highlight">{{ result1 }}</span>
+            </p>
+            <p>
+                ResNet50 预测：<span class="highlight">{{ label2 }}</span>，
+                置信度 <span class="highlight">{{ conf2 }}</span>，
+                判定：<span class="highlight">{{ result2 }}</span>
+            </p>
+        </div>
+
+        <a class="btn-back" href="/">继续识别</a>
+        {% if not model_loaded %}
+            <p class="note">（当前为演示模式，使用模拟预测结果）</p>
+        {% endif %}
+    </div>
+</body>
+</html>
